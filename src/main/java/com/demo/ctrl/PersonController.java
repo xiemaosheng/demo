@@ -35,7 +35,8 @@ public class PersonController {
         text.append("</table>");
         text.append("</body>");
         text.append("</html>");
-        BuildHtmlUtil.createHtmlTemplate(text.toString());
+        BuildHtmlUtil.createPdfTemplate(text.toString());
+        BuildHtmlUtil.createPDF();
         return jsonObject;
     }
 }
