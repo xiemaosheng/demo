@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+              http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <!--每天定时迁移过期的用户vip数据-->
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="vipTimer" method="dealWithInvalidData" cron="0 20 17 * * ?"/>-->
+    <!--</task:scheduled-tasks>-->
+
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="vipTimer" method="retry" cron="*/30 * * * * ?"/>-->
+    <!--</task:scheduled-tasks>-->
+
+    <!--&lt;!&ndash;每天定时同步用户vip数据&ndash;&gt;-->
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="vipTimer" method="active" cron="0 0 17 * * ?"/>-->
+    <!--</task:scheduled-tasks>-->
+
+    <!-- 任务调度器 -->
+    <task:scheduler id="scheduler" pool-size="10"/>
+    <!-- 任务执行器 -->
+    <!--<task:executor id="executor" pool-size="${taks.executor.pool-size}"
+                   queue-capacity="${taks.executor.queue-capacity}"/>-->
+
+    <!--开启注解调度支持 @Async @Scheduled-->
+    <!--<task:annotation-driven executor="executor" scheduler="scheduler" proxy-target-class="true"/>-->
+
+</beans>

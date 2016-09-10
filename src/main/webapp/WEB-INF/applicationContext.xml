@@ -12,6 +12,8 @@
 
 
     <import resource="classpath:spring/applicationContext-mvc.xml" />
+    <import resource="classpath:spring/applicationContext-task.xml" />
+    <import resource="classpath:spring/applicationContext-freemarker.xml" />
     <context:component-scan base-package="com.demo.ctrl">
     </context:component-scan>
 

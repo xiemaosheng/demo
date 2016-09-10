@@ -20,6 +20,12 @@ public class PersonController {
 
     @RequestMapping(value = "/test", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public Object Test(@RequestBody JSONObject jsonObject) throws Exception{
+        BuildHtmlUtil.createPdfTemplate(htmlTemplate2String(jsonObject));
+        BuildHtmlUtil.createPDF();
+        return jsonObject;
+    }
+
+    public String htmlTemplate2String(JSONObject jsonObject){
         StringBuilder text = new StringBuilder();
         text.append("<html>");
         text.append("<title>test</title>");
@@ -35,8 +41,6 @@ public class PersonController {
         text.append("</table>");
         text.append("</body>");
         text.append("</html>");
-        BuildHtmlUtil.createPdfTemplate(text.toString());
-        BuildHtmlUtil.createPDF();
-        return jsonObject;
+        return text.toString();
     }
 }
