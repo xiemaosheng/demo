@@ -1,51 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.1.xsd
-       http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-    <!--&lt;!&ndash; 说明：freemarker配置 &ndash;&gt;-->
-    <!--&lt;!&ndash; 采用注解方式扫描该包下所有含有org.springframework.stereotype.Controller注解的类 &ndash;&gt;-->
-    <!--<context:component-scan base-package="com.demo.ctrl" />-->
-    <!--&lt;!&ndash; InternalResourceViewResolver默认的就是JstlView所以这里就不用配置viewClass了 &ndash;&gt;-->
-    <!--<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">-->
-        <!--&lt;!&ndash; 渲染页面前缀 &ndash;&gt;-->
-        <!--<property name="prefix" value="/freemarker/ftl"></property>-->
-        <!--&lt;!&ndash; 渲染页面后缀 &ndash;&gt;-->
-        <!--<property name="suffix" value="/index.ftl"></property>-->
-        <!--<property name="contentType" value="textml; charset=UTF-8"/>-->
-        <!--<property name="exposeSessionAttributes" value="true" />-->
-        <!--<property name="exposeSpringMacroHelpers" value="true" />-->
-        <!--&lt;!&ndash; 渲染视图的基类，可以作为全局公用属性的输出和渲染 &ndash;&gt;-->
-        <!--<property name="viewClass" value="com.wq.common.web.springmvc.WebFreeMarkerView"/>-->
-    <!--</bean>-->
 
-    <!--<mvc:annotation-driven />-->
-    <!--&lt;!&ndash; 渲染全局配置 &ndash;&gt;-->
-    <!--<bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">-->
-        <!--<property name="templateLoaderPath" value=""/>-->
-        <!--<property name="freemarkerSettings">-->
-            <!--<props>-->
-                <!--<prop key="tag_syntax">auto_detect</prop>-->
-                <!--<prop key="template_update_delay">0</prop>-->
-                <!--<prop key="defaultEncoding">UTF-8</prop>-->
-                <!--<prop key="url_escaping_charset">UTF-8</prop>-->
-                <!--<prop key="locale">en_US</prop>-->
-                <!--<prop key="boolean_format">true,false</prop>-->
-                <!--<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>-->
-                <!--<prop key="date_format">yyyy-MM-dd</prop>-->
-                <!--<prop key="time_format">HH:mm:ss</prop>-->
-                <!--<prop key="number_format">0.######</prop>-->
-                <!--<prop key="whitespace_stripping">true</prop>-->
-            <!--</props>-->
-        <!--</property>-->
-    <!--</bean>-->
+    <bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPaths" value="classpath:template" />
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">0</prop>
+                <prop key="default_encoding">UTF-8</prop>
+                <prop key="locale">zh_CN</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host}"/>
+        <property name="username" value="${mail.username}"/>
+        <property name="password" value="${mail.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.transport.protocol">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="from" value="407922583@qq.com"/>
+        <property name="to" value="qdlgxiemaosheng@163.com"/>
+    </bean>
+
+    <bean id="mailEngine" class="com.demo.mail.MailEngine">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="freeMarkerConfigurer" ref="freeMarkerConfigurer" />
+    </bean>
 
 </beans>
