@@ -24,6 +24,7 @@ import java.util.Set;
 @RestController()
 @RequestMapping(value = "")
 public class PersonController {
+
     @Resource
     private SimpleMailMessage mailMessage;
     @Resource
@@ -64,8 +65,8 @@ public class PersonController {
         File f = new File("E:\\file/test.txt");
         try {
 //            mailEngine.sendMessage("qdlgxiemaosheng@163.com","407922583@qq.com","test","test","test",f);
-            mailEngine.sendEmail("1815111692@qq.com","test");
-//            mailEngine.sendEmail("407922583@qq.com","test","xms","test","E:\\file/test.txt");
+//            mailEngine.sendEmail("1815111692@qq.com","test");
+            mailEngine.sendEmail("407922583@qq.com","test","xms","test","E:\\file/test.txt");
         }catch (Exception e){
             e.printStackTrace();
         }
