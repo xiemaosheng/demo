@@ -1,4 +1,4 @@
-package com.demo.service.interfaces;
+package com.demo.service;
 
 /**
  * Created by Administrator on 2016/9/4 0004.

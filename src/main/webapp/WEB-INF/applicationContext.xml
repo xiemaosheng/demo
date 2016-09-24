@@ -15,6 +15,7 @@
     <import resource="classpath:spring/applicationContext-task.xml" />
     <import resource="classpath:spring/applicationContext-freemarker.xml" />
     <import resource="classpath:spring/applicationContext-resources.xml" />
+    <import resource="classpath:spring/applicationContext-word.xml" />
     <context:component-scan base-package="com.demo.*">
     </context:component-scan>
 
