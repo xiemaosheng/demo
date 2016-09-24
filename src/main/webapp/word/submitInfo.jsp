@@ -32,7 +32,8 @@
                 return;
             }
 
-            data = data.replace("\"", "");
+            data = data.substring(1,data.length-1);
+
             var obj = document.getElementById("template");
             var template = data.split(",");
 
@@ -55,7 +56,7 @@
         <h1>生成word文档</h1>
     </div>
     <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
-        <form role="form" action="/word/submit">
+        <form role="form" action="/word/submit" method="post">
 
             <div class="form-group">
                 <label>请输入原始数据：</label>

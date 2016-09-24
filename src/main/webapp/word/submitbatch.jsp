@@ -14,7 +14,6 @@
     <script src="/js/bootstrap.min.js" type="text/javascript"></script>
     <script>
         function submitData(obj){
-            alert(2);
             $.ajax({
                 cache: true,
                 type: "POST",
@@ -25,7 +24,7 @@
                     alert("内部错误");
                 },
                 success: function(data) {
-                    if(data==="success"){
+                    if(data=="success"){
                         alert("已成功发送邮件！")
                     }
                     else alert("发送失败！");
@@ -39,7 +38,7 @@
                 return;
             }
 
-            data = data.replace("\"", "");
+            data = data.substring(1,data.length-1);
             var obj = document.getElementById("template");
             var template = data.split(",");
 
@@ -58,7 +57,7 @@
         <h1>批量生成word文档</h1>
     </div>
     <div class="col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
-        <form role="form">
+        <form role="form" action="/word/batch" method="post">
 
             <div class="form-group">
                 <label>请输入原始数据：</label>
@@ -69,10 +68,13 @@
                 <select class="form-control" id="template" name="template">
                 </select>
             </div>
-
+            <div class="form-group">
+                <label>请输入目标文件名：</label>
+                <input name="fileName" class="form-control" />
+            </div>
 
             <div class="form-group">
-                <button class="btn btn-success text-center col-lg-4 col-md-4 col-lg-offset-4 col-md-offset-4" onclick="alert(1);submitData(this)">提交</button>
+                <input class="btn btn-success text-center col-lg-4 col-md-4 col-lg-offset-4 col-md-offset-4" onclick="submitData(this)" value="提交"/>
             </div>
         </form>
     </div>

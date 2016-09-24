@@ -32,22 +32,19 @@ public class WordController {
     private MailEngine mailEngine;
 
     @RequestMapping("/submit")
-    public String submit(HttpServletRequest request,String data,String templateName,boolean send,String email){
-        templateName="mapmap.ftl";
+    public String submit(HttpServletRequest request,String data,String template,boolean send,String email){
         Map<String,String> dataMap=new HashMap<String, String>();
-        dataMap.put("project",data);
 
-        String json="{\"project\":{\"name\":\"title\",\"describe\":{\"a\":\"b\"}}}";
-        JSONObject jsonObject= JSON.parseObject(json);
+        JSONObject jsonObject= JSON.parseObject(data);
 
         String templatePath= request.getSession().getServletContext().getRealPath("/")+"template";
         File workPath=new File( request.getSession().getServletContext().getRealPath("/")+"work");
         if(!workPath.exists()){
             workPath.mkdirs();
         }
-        String fileName="temp.doc";
+        String fileName=new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".doc";
 
-        WordService.createWord(jsonObject,templatePath,templateName,workPath,fileName);
+        WordService.createWord(jsonObject,templatePath,template,workPath,fileName);
 
         if(!send){
             return "redirect:/word/download?filePath="+workPath.getAbsolutePath()+File.separator+fileName;
@@ -84,8 +81,12 @@ public class WordController {
 
     @RequestMapping("/batch")
     @ResponseBody
-    public String batch(HttpServletRequest request,String data,String templateName,String fileName){
-        System.out.println(templateName);
+    public String batch(HttpServletRequest request,String data,String template,String fileName){
+        fileName=fileName.trim();
+        if(fileName.indexOf(".")>0) {
+            fileName = fileName.substring(0, fileName.indexOf("."));
+        }
+
         JSONArray array=JSON.parseArray(data);
 
         String templatePath= request.getSession().getServletContext().getRealPath("/")+"template";
@@ -97,9 +98,9 @@ public class WordController {
         try{
             for(Object object:array){
                 JSONObject temp=(JSONObject)object;
-                String filePath=workPath+File.separator+fileName+ UUID.randomUUID();
-                WordService.createWord(temp,templatePath,templateName,workPath,filePath);
-                mailEngine.sendEmail(temp.getString("email"),"test","","test",workPath.getAbsolutePath()+File.separator+fileName);
+                String filePath=fileName+ new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".doc";
+                WordService.createWord(temp,templatePath,template,workPath,filePath);
+                mailEngine.sendEmail(temp.getString("email"),"test","","test",workPath.getAbsolutePath()+File.separator+filePath);
             }
             return "success";
         }catch (Exception e){
@@ -115,16 +116,16 @@ public class WordController {
         MultipartFile file = mreq.getFile("file");
         String fileName = file.getOriginalFilename();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        File path=new File(req.getSession().getServletContext().getRealPath("/")+"upload");
+        File path=new File(req.getSession().getServletContext().getRealPath("/")+"template");
         if(!path.exists()){
             path.mkdir();
         }
-        String aim=path.getAbsolutePath()+ File.separator+sdf.format(new Date())+fileName.substring(fileName.lastIndexOf('.'));
+        String aim=path.getAbsolutePath()+ File.separator+fileName.substring(0,fileName.lastIndexOf("."))+sdf.format(new Date())+fileName.substring(fileName.lastIndexOf('.'));
         FileOutputStream fos = new FileOutputStream(aim);
         fos.write(file.getBytes());
         fos.flush();
         fos.close();
-
+        req.setAttribute("result","success");
         return "uploadresult.jsp";
     }
 
@@ -136,7 +137,9 @@ public class WordController {
         File[] templates=parent.listFiles();
         String fileNames="";
         for(File file:templates){
-            fileNames+=","+file.getName();
+            if(file.getName().endsWith(".ftl")){
+                fileNames+=","+file.getName();
+            }
         }
         return fileNames.substring(1);
     }
