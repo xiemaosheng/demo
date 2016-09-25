@@ -11,7 +11,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                <h4 class="modal-title" id="myModalLabel">上传文件</h4>
             </div>
             <div class="modal-body">
                 <form role="form" action="/word/upload" method="post" enctype="multipart/form-data">
@@ -21,8 +21,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="$('#upload').find('form').submit();">Save changes</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="$('#upload').find('form').submit();">上传</button>
             </div>
         </div>
     </div>
