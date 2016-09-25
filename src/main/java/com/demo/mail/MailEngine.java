@@ -63,6 +63,7 @@ public class MailEngine {
         try {
             Configuration configuration = freeMarkerConfigurer.getConfiguration();
             Template t = configuration.getTemplate(templateName);
+            t.setEncoding("UTF-8");
             return FreeMarkerTemplateUtils.processTemplateIntoString(t, map);
         } catch (TemplateException e) {
             log.error("Error while processing FreeMarker template ", e);
@@ -133,6 +134,7 @@ public class MailEngine {
     public void send(SimpleMailMessage msg, String templateName, Map model) {
         //生成html邮件内容
         String content = generateEmailContent(templateName, model);
+        System.out.println(content);
         MimeMessage mimeMsg = null;
         try {
             mimeMsg = ((JavaMailSenderImpl) mailSender).createMimeMessage();

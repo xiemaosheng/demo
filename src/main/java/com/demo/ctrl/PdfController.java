@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -23,18 +25,41 @@ import java.util.Set;
  */
 @RestController()
 @RequestMapping(value = "")
-public class PersonController {
+public class PdfController {
     @Resource
     private SimpleMailMessage mailMessage;
     @Resource
     private MailEngine mailEngine;
 
-    @RequestMapping(value = "/test", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-    public Object test(@RequestBody JSONObject jsonObject) throws Exception {
-        BuildHtmlUtil.createPdfTemplate(htmlTemplate2String(jsonObject));
-        BuildHtmlUtil.createPDF();
-        return jsonObject;
+    @RequestMapping(value = "/test")
+    public String test(HttpServletRequest request, String data, String template, boolean send, String email) throws Exception {
+        JSONObject jsonObject = JSONObject.parseObject(request.getParameter("data"));
+        String fileName="temp.html";
+        String des = "temp.pdf";
+        File workPath=new File( request.getSession().getServletContext().getRealPath("/")+"work");
+        if(!workPath.exists()){
+            workPath.mkdirs();
+        }
+        File f = new File(workPath,fileName);
+        PrintStream ps = new PrintStream(f);
+        ps.println(mailEngine.generateEmailContent(template,jsonObject));
+
+        BuildHtmlUtil.createPDF(f,request.getSession().getServletContext().getRealPath("/")+"work/"+des);
+
+        if(!send){
+            return "redirect:/word/download?filePath="+workPath.getAbsolutePath()+File.separator+des;
+        }
+
+        try{
+            mailEngine.sendEmail(email,"test","","test",workPath.getAbsolutePath()+File.separator+des);
+            request.setAttribute("result","success");
+            return "submitresult.jsp";
+        }catch(Exception e){
+            request.setAttribute("result","failure");
+            return "submitresult.jsp";
+        }
     }
+
 
     public String htmlTemplate2String(JSONObject jsonObject) {
         StringBuilder text = new StringBuilder();
@@ -59,16 +84,16 @@ public class PersonController {
     public Object send(@RequestBody User user){
         Map<String,User> model = new HashMap<String , User>();
         model.put("user",user);
-//        mailEngine.send(mailMessage,"text.ftl",model);
+        mailEngine.send(mailMessage,"text.ftl",model);
 
-        File f = new File("E:\\file/test.txt");
-        try {
-//            mailEngine.sendMessage("qdlgxiemaosheng@163.com","407922583@qq.com","test","test","test",f);
-            mailEngine.sendEmail("1815111692@qq.com","test");
-//            mailEngine.sendEmail("407922583@qq.com","test","xms","test","E:\\file/test.txt");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//        File f = new File("E:\\file/test.txt");
+//        try {
+////            mailEngine.sendMessage("qdlgxiemaosheng@163.com","407922583@qq.com","test","test","test",f);
+//            mailEngine.sendEmail("1815111692@qq.com","test");
+////            mailEngine.sendEmail("407922583@qq.com","test","xms","test","E:\\file/test.txt");
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         return null;
     }
