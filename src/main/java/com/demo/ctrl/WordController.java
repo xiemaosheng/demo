@@ -35,7 +35,15 @@ public class WordController {
     public String submit(HttpServletRequest request,String data,String template,boolean send,String email){
         Map<String,String> dataMap=new HashMap<String, String>();
 
-        JSONObject jsonObject= JSON.parseObject(data);
+        JSONObject jsonObject;
+        try{
+
+            jsonObject = JSON.parseObject(data);
+        }catch (Exception e){
+            request.setAttribute("result","failure");
+            e.printStackTrace();
+            return "submitresult.jsp";
+        }
 
         String templatePath= request.getSession().getServletContext().getRealPath("/")+"template";
         File workPath=new File( request.getSession().getServletContext().getRealPath("/")+"work");
@@ -56,6 +64,7 @@ public class WordController {
             return "submitresult.jsp";
         }catch(Exception e){
             request.setAttribute("result","failure");
+            e.printStackTrace();
             return "submitresult.jsp";
         }
     }
