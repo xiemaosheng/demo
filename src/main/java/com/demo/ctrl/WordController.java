@@ -59,7 +59,7 @@ public class WordController {
         }
 
         try{
-            mailEngine.sendEmail(email,"test","","test",workPath.getAbsolutePath()+File.separator+fileName);
+            mailEngine.sendEmail(email,"work","work","work",workPath.getAbsolutePath()+File.separator+fileName);
             request.setAttribute("result","success");
             return "submitresult.jsp";
         }catch(Exception e){
