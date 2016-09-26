@@ -241,21 +241,7 @@ public class MailEngine {
         message.setContent(msgMultipart);
         // 邮件内容
         MimeBodyPart htmlPart = new MimeBodyPart();
-        htmlPart.setContent(
-                "<body><div style='width: 1000px;height: 300px;margin: 0px auto;margin-bottom:20px;border:1px solid #92B0DD;background-color: #FFFFFf;'><h3>这是系统自动发送的邮件，请勿回复!</h3><br/>"+
-                        content+"</div></body>",
-                "text/html;charset=UTF-8");
-        // TODO 组装的顺序非常重要，一定要先组装文本域，再组装文件
         msgMultipart.addBodyPart(htmlPart);
-        // 组装附件
-        // MimeBodyPart file = new MimeBodyPart();
-        // FileDataSource file_datasource = new FileDataSource(
-        // "D:\\report_data2.txt");
-        // DataHandler dh = new DataHandler(file_datasource);
-        // file.setDataHandler(dh);
-        // // 附件区别内嵌内容的一个特点是有文件名，为防止中文乱码要编码
-        // file.setFileName(MimeUtility.encodeText(dh.getName()));
-        // msgMultipart.addBodyPart(file);
         message.saveChanges();
 
         // 发送邮件的过程:95188

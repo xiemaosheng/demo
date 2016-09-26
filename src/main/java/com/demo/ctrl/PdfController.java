@@ -33,7 +33,7 @@ public class PdfController {
     @Resource
     private MailEngine mailEngine;
 
-    @RequestMapping(value = "/test")
+    @RequestMapping(value = "/pdf/submit")
     public String test(HttpServletRequest request, String data, String template, boolean send, String email) throws Exception {
         JSONObject jsonObject = JSONObject.parseObject(request.getParameter("data"));
         String fileName=new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".html";
