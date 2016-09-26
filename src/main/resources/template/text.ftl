@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh">
-<meta charset="UTF-8" />
 <head>
     <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         body {
             margin-left: 45px;
@@ -115,19 +115,18 @@
     </style>
 </head>
 <body>
-作者:<a href="http://www.xdemo.org/">http://www.xdemo.org/</a>
 <div>
-    <p>你好：${username}</p>
+    <p>Hello：${username}</p>
     <div class="logo"><!--这里的图片使用相对与ITextRenderer.getSharedContext().setBaseURL("file:/"+imageDiskPath);的路径-->
-        图片支持<img src="logo1.png" />
+      <img src="logo1.png" />
     </div>
     <div>
-        <p>Hello PDF: 中文支持</p>
+        <p></p>
         <div style="border:1px solid red;color:red;">
-            样式支持,红边框，红字
+
         </div>
         <div style="border:10px solid blue;color:blue;">
-            样式支持,蓝色10像素的边框，蓝字
+
         </div>
         <hr/>
         <table>

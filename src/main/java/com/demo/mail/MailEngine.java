@@ -61,9 +61,12 @@ public class MailEngine {
 
     public String generateEmailContent(String templateName, Map map) {
         try {
+
             Configuration configuration = freeMarkerConfigurer.getConfiguration();
+            //设置编码
+            configuration.setDefaultEncoding("UTF-8");
+
             Template t = configuration.getTemplate(templateName);
-            t.setEncoding("UTF-8");
             return FreeMarkerTemplateUtils.processTemplateIntoString(t, map);
         } catch (TemplateException e) {
             log.error("Error while processing FreeMarker template ", e);
@@ -186,10 +189,6 @@ public class MailEngine {
         message.setContent(msgMultipart);
         // 邮件内容
         MimeBodyPart htmlPart = new MimeBodyPart();
-        htmlPart.setContent(
-                "<body><div style='width: 1000px;height: 300px;margin: 0px auto;margin-bottom:20px;border:1px solid #92B0DD;background-color: #FFFFFf;'><h3>这是系统自动发送的邮件，请勿回复!</h3><br/>"+
-                        content+"</div></body>",
-                "text/html;charset=UTF-8");
         // TODO 组装的顺序非常重要，一定要先组装文本域，再组装文件
         msgMultipart.addBodyPart(htmlPart);
         // 组装附件

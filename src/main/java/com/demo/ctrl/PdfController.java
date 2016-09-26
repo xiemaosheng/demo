@@ -16,6 +16,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -34,20 +36,21 @@ public class PdfController {
     @RequestMapping(value = "/test")
     public String test(HttpServletRequest request, String data, String template, boolean send, String email) throws Exception {
         JSONObject jsonObject = JSONObject.parseObject(request.getParameter("data"));
-        String fileName="temp.html";
-        String des = "temp.pdf";
+        String fileName=new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".html";
+        String des = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date())+".pdf";
         File workPath=new File( request.getSession().getServletContext().getRealPath("/")+"work");
         if(!workPath.exists()){
             workPath.mkdirs();
         }
         File f = new File(workPath,fileName);
         PrintStream ps = new PrintStream(f);
-        ps.println(mailEngine.generateEmailContent(template,jsonObject));
-
+        String text = mailEngine.generateEmailContent(template,jsonObject);
+        ps.println(text);
+        System.out.println(mailEngine.generateEmailContent(template,jsonObject));
         BuildHtmlUtil.createPDF(f,request.getSession().getServletContext().getRealPath("/")+"work/"+des);
-
+        ps.close();
         if(!send){
-            return "redirect:/word/download?filePath="+workPath.getAbsolutePath()+File.separator+des;
+            return "redirect:"+ request.getSession().getServletContext().getRealPath("/") +"/word/download?filePath="+workPath.getAbsolutePath()+File.separator+des;
         }
 
         try{
